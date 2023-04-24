@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .done{
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+    <!-- 이렇게 하면 button에 대한 동작(key ~ )을 따로 지정해야 한다.
+  <input type="text">
+  <button>add</button> -->
+
+  <!-- form 안에는 'Enter'을 통한 submit이 내장되어 있고, submit도 기본적으로 내장되어 있다. -->
+
+  <form action="" id="todo-form">
+    <input type="text">
+    <button>add</button>
+  </form>
+
+  <ul id="todo-list">
+    <!-- <li>not done</li>
+    <li class="done">done</li> -->
+  </ul>
+
+  <script>
+    // 1. from 선택
+    const todoForm = document.querySelector('#todo-form')
+    // 버튼 먼저 할려면
+    // const todoForm = document.querySelector('#todo-form > button')
+
+    // 어쩌피 매 입력마다 ul 태그 불러올거면, 함수 바깥으로 빼는 것이 이득
+    // 7. ul 태그 선택 
+    // const ulTag = document.querySelector('ul')
+    const todoList = document.querySelector('#todo-list')
+
+    // 2. form 이벤트 부착
+    todoForm.addEventListener('submit', function(e) {
+      // submit은 기본값에 대한 요청을 기본적으로 가지고 있다. == 자동 새로고침 내장
+      // 3. form의 기본 이벤트 삭제
+      e.preventDefault() // submit의 기본 기능 막기
+      // console.log(e)
+      
+      // 4. form 안의 input 태그 선택
+      const todoInput = todoForm.querySelector('input')
+      // console.log(todoInput)
+      // console.log(todoInput.innerText())
+      // 아무것도 안 나온다. innerText의 특징 때문인데, 기본적으로 value를 가지고 있기 때문이다.
+      // 즉, 입력받는 문자열을 value 값으로 지정해줘야, 우리가 원하는 출력이 된다.
+      // console.log(todoInput.value)
+
+      // 5. input tag의 값 가져오기
+      // 9. value trimming (띄어쓰기 없애기)
+      // practice에서는 if (data.trim()) {
+      const value = todoInput.value.trim()
+
+      // 빈 문자열은 False, 그러므로 작동
+      // cf) 빈 리스트는 True
+      // 10. trimming 조건 달기
+      if (value) {
+        // 6. li tag 만들기
+        const liTag = document.createElement('li')
+        liTag.innerText = value
+        // console.log(liTag)
+
+        // 8. li tag append
+        todoList.appendChild(liTag)
+        todoInput.value = ""
+
+        // 11. 업데이트 로직
+        liTag.addEventListener('click', function(e) {
+          liTag.classList.toggle('done')
+        })
+
+        // 12. 삭제 버튼 만들기
+        const deleteBtn = document.createElement('button')
+        deleteBtn.innerText = '삭제'
+        liTag.appendChild(deleteBtn)
+
+        // 13. 삭제 버튼 로직
+        // 삭제 버튼을 누르니까 줄이 그어진다.
+        // Event 전파 == Event Bubbling
+        // 해렬방법 1. li 버튼 안에 deleteBtn을 안 넣는다
+        // 해결방법 2.
+        deleteBtn.addEventListener('click', function(e){
+          e.stopPropagation()
+          liTag.remove()
+        })
+
+      } else {
+        alert('값을 입력하시오.')
+      }
+
+
+      // 추가 과제
+      // 14. Delete Done 버튼 만들어가지고, 전체 삭제 기능 추가
+      // 또는 여태까지 입력했던 것을 아래로 옮기기
+      // <할 일>
+      // ---
+      // <한 일>
+
+    })
+
+  </script>
+</body>
+</html>
